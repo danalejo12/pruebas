@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Aprendices | SENA</title>
+
+   
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+    <header class="encabezado">
+        <h1>Listado de Aprendices SENA</h1>
+        <p>Sistema de Gestión Académica</p>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenedor-principal">
+
+        <section class="tabla-seccion">
+
+            <h2>Aprendices Registrados</h2>
+
+            <p>
+                Consulta la información de los aprendices,
+                sus programas de formación y competencias.
+            </p>
+
+            <div class="tabla-contenedor">
+
+                <table class="tabla-aprendices">
+
+                    <!-- ENCABEZADOS DE LA TABLA -->
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre Completo</th>
+                            <th>Correo Electrónico</th>
+                            <th>Ficha / Grupo</th>
+                            <th>Programa</th>
+                            <th>Nivel Académico</th>
+                            <th>Sede</th>
+                            <th>Fecha de Inicio</th>
+                            <th>Fecha de Finalización</th>
+                            <th>Competencias</th>
+                        </tr>
+                    </thead>
+
+                    <!-- DATOS DE LOS APRENDICES -->
+                    <tbody>
+
+                        {% for aprendiz in aprendices %}
+
+                        <tr class="fila-aprendiz">
+
+                            <!-- DOCUMENTO -->
+                            <td class="col-documento">
+                                {{ aprendiz.documento }}
+                            </td>
+
+                            <!-- NOMBRE Y APELLIDO -->
+                            <td class="col-nombre">
+                                {{ aprendiz.nombre }}
+                                {{ aprendiz.apellido }}
+                            </td>
+
+                            <!-- CORREO -->
+                            <td class="col-correo">
+                                {{ aprendiz.correo }}
+                            </td>
+
+                            <!-- FICHA O GRUPO -->
+                            <td class="col-ficha">
+                                {% if aprendiz.programa %}
+                                    {{ aprendiz.programa.grupo }}
+                                {% else %}
+                                    <span class="sin-datos">
+                                        Sin ficha asignada
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- PROGRAMA -->
+                            <td class="col-programa">
+                                {% if aprendiz.programa %}
+                                    {{ aprendiz.programa.nombre }}
+                                {% else %}
+                                    <span class="sin-datos">
+                                        No asignado
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- NIVEL ACADÉMICO -->
+                            <td>
+                                {% if aprendiz.programa %}
+                                    {{ aprendiz.programa.nivel }}
+                                {% else %}
+                                    <span class="sin-datos">
+                                        Sin nivel
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- SEDE -->
+                            <td>
+                                {% if aprendiz.programa %}
+                                    {{ aprendiz.programa.sede }}
+                                {% else %}
+                                    <span class="sin-datos">
+                                        Sin sede
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- FECHA DE INICIO -->
+                            <td>
+                                {% if aprendiz.programa %}
+                                    {{ aprendiz.programa.fecha_inicio|date:"d/m/Y" }}
+                                {% else %}
+                                    <span class="sin-datos">
+                                        No disponible
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- FECHA DE FINALIZACIÓN -->
+                            <td>
+                                {% if aprendiz.programa %}
+                                    {{ aprendiz.programa.fecha_fin|date:"d/m/Y" }}
+                                {% else %}
+                                    <span class="sin-datos">
+                                        No disponible
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- COMPETENCIAS -->
+                            <td class="col-competencias">
+
+                                <ul class="lista-competencias">
+
+                                    {% for comp in aprendiz.competencia.all %}
+
+                                    <li class="item-competencia">
+
+                                        <strong>
+                                            {{ comp.codigo }}
+                                        </strong>
+
+                                        {{ comp.nombre }}
+
+                                        <p>
+                                            {{ comp.descripcion }}
+                                        </p>
+
+                                        <small>
+                                            RAPs: {{ comp.raps }}
+                                        </small>
+
+                                    </li>
+
+                                    {% empty %}
+
+                                    <li class="sin-datos">
+                                        Sin competencias asignadas
+                                    </li>
+
+                                    {% endfor %}
+
+                                </ul>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <!-- CUANDO NO EXISTEN APRENDICES -->
+                        <tr class="fila-vacia">
+                            <td colspan="10">
+                                No hay aprendices registrados
+                                actualmente.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <p>
+            Sistema de Gestión de Aprendices SENA
+            &copy; 2026
+        </p>
+    </footer>
+
+</body>
+</html>
